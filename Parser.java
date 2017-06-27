@@ -46,7 +46,9 @@ class Parser
             System.out.println ("There was an error during reading: "
                                 + exc.getMessage());
         }
-
+        if(inputLine == null){
+        	return null;
+        }
         StringTokenizer tokenizer = new StringTokenizer(inputLine);
 
         if(tokenizer.hasMoreTokens())

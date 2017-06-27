@@ -18,16 +18,23 @@ import java.util.Iterator;
 
 class Room
 {
+	private Inventory inventory;
+	private Item item;
 	private String description;
+	private boolean locked;
     private HashMap<String, Room> exits;        // stores exits of this room.
+    private String name;
 
     /**
      * Create a room described "description". Initially, it has no exits.
      * "description" is something like "in a kitchen" or "in an open court
      * yard".
      */
-    public Room(String description)
+    public Room(String name, String description)
     {
+    	this.name = name;
+    	inventory = new Inventory();
+    	item = new HealthPotion("");
         this.description = description;
         exits = new HashMap<String, Room>();
     }
@@ -58,6 +65,22 @@ class Room
     {
         return "You are " + description + ".\n" + getExitString();
     }
+    
+    public String getItemInRoom(){
+    	return "You see a" + getItemString();
+    }
+    
+    public String getName() {
+    	return this.name;
+    }
+    
+    public String getItemDesc(){
+    	return item.itemDescription;
+    }
+    
+    public String getOnlyItem(){
+    	return getItemString();
+    }
 
     /**
      * Return a string describing the room's exits, for example
@@ -72,6 +95,29 @@ class Room
         return returnString;
     }
 
+	private String getItemString(){
+    	String returnString = "";
+    	Set<String> keys = inventory.getInventory().keySet();
+    	for (String string : keys) {
+    		returnString += " " + string;
+		}
+    	return returnString;
+    }
+	
+	private String getItemDescString(){
+    	String returnItemDescString = "";
+    	Set<String> itemDesc = inventory.getInventory().keySet();
+    	for (String string : itemDesc) {
+    		returnItemDescString += " " + string;
+		}
+    	return returnItemDescString;
+    }
+	
+	public Item getItem(String key)
+    {
+        return (Item)inventory.getInventory().get(key);
+    }
+
     /**
      * Return the room that is reached if we go from this room in direction
      * "direction". If there is no room in that direction, return null.
@@ -80,4 +126,20 @@ class Room
     {
         return (Room)exits.get(direction);
     }
+
+	/**
+	 * @return the inventory
+	 */
+	public Inventory getInventory() {
+		return inventory;
+	}
+	
+	public void setLocked(boolean state){
+		locked = state;
+	}
+	
+	public boolean getLocked(){
+		return locked;
+	}
+
 }

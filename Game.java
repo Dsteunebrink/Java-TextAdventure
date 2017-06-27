@@ -19,16 +19,21 @@ class Game
 {
     private Parser parser;
     private Player player;
-
+    private Item items;
+    private Room outside, theatre, pub, lab, office, cantine, cave, kitchen;
+    
     /**
      * Create the game and initialize its internal map.
      */
     public Game()
     {
     	player = new Player();
+    	items = new HealthPotion("");
+    	items = new Knife("");
+    	items = new Shovel("");
         createRooms();
+        createItems();
         parser = new Parser();
-     
     }
 
     /**
@@ -36,16 +41,16 @@ class Game
      */
     private void createRooms()
     {
-        Room outside, theatre, pub, lab, office, cantine, cave;
-
         // create the rooms
-        outside = new Room("outside the main entrance of the university");
-        theatre = new Room("in a lecture theatre");
-        pub = new Room("in the campus pub");
-        lab = new Room("in a computing lab");
-        office = new Room("in the computing admin office");
-        cantine = new Room("in the cantine with alot of food"); 
-        cave = new Room("in an cave its realy dark");
+        outside = new Room("outside", "outside the main entrance of the university");
+        theatre = new Room("theatre", "in a lecture theatre");
+        pub = new Room("pub", "in the campus pub");
+        lab = new Room("lab", "in a computing lab");
+        office = new Room("office", "in the computing admin office");
+        cantine = new Room("cantine", "in the cantine with alot of food"); 
+        cave = new Room("cave", "in an cave its realy dark");
+        kitchen = new Room("Kitchen","in the kitchen with a weird guy standing in front of a window");
+        kitchen.setLocked(true);
 
         // Initialize room exits
         outside.setExit("east", theatre);
@@ -64,12 +69,38 @@ class Game
         office.setExit("west", lab);
         
         cantine.setExit("down", theatre);
+        cantine.setExit("east", kitchen);
         
         cave.setExit("up", theatre);
         
+        kitchen.setExit("west", cantine);
+        
         player.setCurrentRoom(outside);
     }
-
+    
+    private void createItems(){
+    	Item knife, healthpotion, shovel, book;
+    	
+    	// create the items
+    	knife = new Knife("a really sharp knife with blood on it");
+    	healthpotion = new HealthPotion("a red potion used for healing");
+    	shovel = new Shovel("a dirty shovel there is still wet dirt on it");
+    	book = new Knife("a book with a weird shine on it");
+    	
+    	// Initialize where the items are
+    	Inventory outsideinv = outside.getInventory();
+    	outsideinv.addItem("knife", knife);
+    	
+    	Inventory labinv = lab.getInventory();
+    	labinv.addItem("book", book);
+    	
+    	Inventory officeinv = office.getInventory();
+    	officeinv.addItem("healthPotion", healthpotion);
+    	
+    	Inventory caveinv = cave.getInventory();
+    	caveinv.addItem("shovel", shovel);
+    }
+    
     /**
      *  Main play routine.  Loops until end of play.
      */
@@ -83,7 +114,10 @@ class Game
         boolean finished = false;
         while (! finished) {
             Command command = parser.getCommand();
-            finished = processCommand(command);
+            if(command != null){
+            	finished = processCommand(command);
+            }
+            
         }
         System.out.println("Thank you for playing.  Good bye.");
     }
@@ -96,6 +130,9 @@ class Game
         System.out.println();
         System.out.println("Welcome to Adventure!");
         System.out.println("Adventure is a new, incredibly boring adventure game.");
+        System.out.println("You wake up you're hand is covered in blood and is bleeding fast.");
+        System.out.println("I need to find something to stop the bleeding.");
+        System.out.println("You walk to an abandoned university.");
         System.out.println("Type 'help' if you need help.");
         System.out.println();
         System.out.println(player.getCurrentRoom().getLongDescription());
@@ -122,8 +159,21 @@ class Game
             goRoom(command);
         else if (commandWord.equals("quit"))
             wantToQuit = quit(command);
-        else if (commandWord.equals("look"))
-        	System.out.println(player.getCurrentRoom().getLongDescription());
+        else if (commandWord.equals("look")){
+        	if(player.getCurrentRoom().getOnlyItem() == ""){
+        		System.out.println("You see nothing special about this room");
+        	}else{
+        		System.out.println(player.getCurrentRoom().getItemInRoom());
+        	}
+        }
+        else if (commandWord.equals("take"))
+        	player.takeItem(command);
+        else if (commandWord.equals("drop"))
+        	player.dropItem(command);
+        else if (commandWord.equals("health"))
+        	System.out.println("You're health is: " + player.showHealth());
+        else if (commandWord.equals("use"))
+        	player.useItem(command);
         return wantToQuit;
     }
 
@@ -163,6 +213,10 @@ class Game
         if (nextRoom == null)
             System.out.println("There is no door!");
         else {
+        	if (nextRoom.getLocked()){
+        		System.out.println("The door is locked you need to find a way in");
+        		return;
+        	}
         	player.setCurrentRoom(nextRoom);
         	player.dealDamage(1);
         	player.IsAlive();
@@ -191,5 +245,4 @@ class Game
         Game game = new Game();
         game.play();
     }
-    
 }
