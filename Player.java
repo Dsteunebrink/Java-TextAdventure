@@ -8,7 +8,7 @@ class Player{
 	private Inventory inventory;
 	
 	public Player(){
-		health = 10;
+		health = 15;
     	setEnemy(new Enemy());
 		inventory = new Inventory();
 	}
