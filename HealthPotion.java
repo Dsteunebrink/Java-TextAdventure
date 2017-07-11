@@ -3,20 +3,20 @@ public class HealthPotion extends Item {
 	
 	private boolean usedHealth;
 	
-	public HealthPotion(String itemDescription) {
-		super(itemDescription);
+	public HealthPotion(String itemDescription, int weigth) {
+		super(itemDescription, weigth);
 		usedHealth = true;
 		// TODO Auto-generated constructor stub
 	}
 
 	public void useHealthPotion(Player player){
 		if(usedHealth == true){
-			player.heal(2);
-			System.out.println("you have healed yourself for 2 health points");
+			player.heal(5);
+			System.out.println("you have healed yourself for 5 health points.");
 			System.out.println("Health: " + player.showHealth());
 			usedHealth = false;
 		}else{
-			System.out.println("You can't heal with an empty potion");
+			System.out.println("You can't heal with an empty potion.");
 		}
 		
 	}

@@ -3,9 +3,11 @@ import java.util.HashMap;
 public class Inventory {
 	
 	private HashMap<String, Item> inventory;
+	private int maxWeight;
 	
 	public Inventory() {
 		inventory = new HashMap<String, Item>();
+		maxWeight = 1;
 	}
 	
 	public void addItem(String key, Item item){

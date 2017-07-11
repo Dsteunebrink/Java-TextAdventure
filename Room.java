@@ -22,6 +22,7 @@ class Room
 	private Item item;
 	private String description;
 	private boolean locked;
+	private boolean locked1;
     private HashMap<String, Room> exits;        // stores exits of this room.
     private String name;
 
@@ -34,7 +35,7 @@ class Room
     {
     	this.name = name;
     	inventory = new Inventory();
-    	item = new HealthPotion("");
+    	item = new HealthPotion("", 0);
         this.description = description;
         exits = new HashMap<String, Room>();
     }
@@ -140,6 +141,20 @@ class Room
 	
 	public boolean getLocked(){
 		return locked;
+	}
+
+	/**
+	 * @return the locked1
+	 */
+	public boolean getLocked1() {
+		return locked1;
+	}
+
+	/**
+	 * @param locked1 the locked1 to set
+	 */
+	public void setLocked1(boolean locked1) {
+		this.locked1 = locked1;
 	}
 
 }

@@ -4,10 +4,12 @@ class Player{
 	
 	private Room currentRoom;
 	private int health;
+    private Enemy enemy;
 	private Inventory inventory;
 	
 	public Player(){
 		health = 10;
+    	setEnemy(new Enemy());
 		inventory = new Inventory();
 	}
 
@@ -39,8 +41,16 @@ class Player{
 	
 	public void IsAlive(){
 		if(health <= 0){
-			System.out.println("You were taking too long and died because of blood loss");
+			System.out.println("You were taking too long and died because of blood loss.");
 			System.exit(0);
+		}
+	}
+	
+	public boolean isAlive(){
+		if(health <= 0){
+			return true;
+		}else{
+			return false;
 		}
 	}
 
@@ -85,7 +95,7 @@ class Player{
     	Item takenItem = getCurrentRoom().getItem(item);  
     	
     	if(takenItem == null)
-    		System.out.println("There is no such item here");
+    		System.out.println("There is no such item here.");
     	else{
     		if (getCurrentRoom().getInventory().containsItem(takenItem) != null) {
     			System.out.println("You took the" + getCurrentRoom().getOnlyItem());
@@ -95,8 +105,8 @@ class Player{
     			if(key == "book"){
     				getCurrentRoom().getInventory().addItem(key,takenItem);
         			getInventory().removeItem(takenItem);
-    				System.out.println("There was a spell on the book you burned yourself");
-    				System.out.println("because the book burned your hand, you dropped it");
+    				System.out.println("There was a spell on the book you burned yourself.");
+    				System.out.println("because the book burned your hand, you dropped it.");
     				dealDamage(1);
     				System.out.println("Health: " + showHealth());
     			}
@@ -108,7 +118,7 @@ class Player{
 		
 		if(!command.hasSecondWord()){
 			// if there is no second word, we don't know what to drop...
-			System.out.println("Drop what");
+			System.out.println("Drop what?");
 			return;
 		}
 	
@@ -117,7 +127,7 @@ class Player{
 		Item takenItem = getItem(item);
 	
 		if(takenItem == null)
-			System.out.println("There is no such item here");
+			System.out.println("There is no such item here.");
 		else{
 			if (getInventory().containsItem(takenItem) != null) {
 				String key = getInventory().containsItem(takenItem);
@@ -132,7 +142,7 @@ class Player{
 		
 		if(!command.hasSecondWord()){
 			// if there is no second word, we don't know what to use...
-			System.out.println("Use what");
+			System.out.println("Use what?");
 			return;
 		}
 		
@@ -141,10 +151,24 @@ class Player{
 		Item usedItem = getItem(item);
 		
 		if(usedItem == null) {
-			System.out.println("You don't have such item");
+			System.out.println("You don't have such item.");
 			return;
 		}
 		usedItem.useItem(command, this);
 		
+	}
+
+	/**
+	 * @return the enemy
+	 */
+	public Enemy getEnemy() {
+		return enemy;
+	}
+
+	/**
+	 * @param enemy the enemy to set
+	 */
+	public void setEnemy(Enemy enemy) {
+		this.enemy = enemy;
 	}
 }

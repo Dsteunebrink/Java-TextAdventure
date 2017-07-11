@@ -1,8 +1,8 @@
 
 public class Shovel extends Item {
 	
-	public Shovel(String itemDescription) {
-		super(itemDescription);
+	public Shovel(String itemDescription, int weigth) {
+		super(itemDescription, weigth);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -10,12 +10,12 @@ public class Shovel extends Item {
 		if (player.getCurrentRoom().getName().equalsIgnoreCase("cantine")) {
 			System.out.println("you broke down the door with the shovel");
 			Room current = player.getCurrentRoom();
-			Room room = current.getExit("east");
+			Room room = current.getExit("north");
 			if (room.getName().equalsIgnoreCase("kitchen")){
 				room.setLocked(false);
 			}
 		}else {
-			System.out.println("You can't use the shovel here what do you want the do dig or something");
+			System.out.println("You can't use the shovel here what do you want the do dig or something.");
 		}
 	}
 
